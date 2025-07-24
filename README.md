@@ -1,5 +1,4 @@
 # FakeRealNewsClassifier
-
 This project will not be highly modularized, but rather proof-of-concept using each library in the same project.
 
 ### Tech stack:
