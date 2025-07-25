@@ -5,6 +5,7 @@
 # import functions from helper scripts
 import debug
 import params
+import funcs
 
 # import libraries
 import os
@@ -92,25 +93,27 @@ for csv in csv_files:
         word_count = len(words)
         avg_word_len = sum(len(w) for w in words) / word_count if word_count else 0
 
-        # Date -> Day of week (0–6)
-        weekday = pd.to_datetime(date_str).weekday()
+        weekday_int = funcs.monthStrToWeekdayNum(date_str)
 
-        # Append structured article record
-        articles.append({
-            "trueNotFake": (csv == "True.csv"),
-            "word_count": word_count,
-            "avg_word_len": float(avg_word_len),
-            "title": str(title),
-            "subject": str(subject),
-            "text": str(text),
-            "weekday": weekday
-        })
+        if weekday_int == -1:
+            debug.log.warning(f"Invalid date {date_str}, skipping article")
+        else:
+            # Append structured article record
+            articles.append({
+                "trueNotFake": (csv == "True.csv"),
+                "word_count": word_count,
+                "avg_word_len": float(avg_word_len),
+                "title": str(title),
+                "subject": str(subject),
+                "text": str(text),
+                "weekday": weekday_int
+            })
 
 # Shuffle article order
 random.shuffle(articles)
 
-if params.debugSection_preprocessing:
-    debug.log.preprocessing([article["trueNotFake"] for article in articles])
+# if params.debugSection_preprocessing:
+#     debug.log.preprocessing([article["weekday"] for article in articles])
 
     # print(article_wordCount)
     # print(article_avgWordLen)
